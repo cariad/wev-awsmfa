@@ -63,7 +63,6 @@ Your minimal configuration is likely to look like this:
 [AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN]:
   plugin:
     id: wev-awsmfa
-    mfa_device: choo choo
 ```
 
 There are two optional properties:
