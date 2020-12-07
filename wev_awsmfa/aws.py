@@ -1,9 +1,8 @@
 from datetime import datetime
 from logging import Logger
-from typing import Tuple
+from typing import Any, Tuple
 
 from boto3 import client
-from mypy_boto3_sts.type_defs import CredentialsTypeDef
 from wev.sdk.exceptions import CannotResolveError
 
 
@@ -81,7 +80,7 @@ def get_session_token(
     )
 
 
-def get_credential_str(credentials: CredentialsTypeDef, key: str) -> str:
+def get_credential_str(credentials: Any, key: str) -> str:
     if value := str(credentials.get(key, "")):
         return value
 
@@ -90,7 +89,7 @@ def get_credential_str(credentials: CredentialsTypeDef, key: str) -> str:
     )
 
 
-def get_credential_datetime(credentials: CredentialsTypeDef, key: str) -> datetime:
+def get_credential_datetime(credentials: Any, key: str) -> datetime:
     value = credentials.get(key, None)
     if value is None:
         raise CannotResolveError(
