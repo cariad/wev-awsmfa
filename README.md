@@ -1,2 +1,3 @@
-# wev-awsmfa
-Amazon Web Services multi-factor authentication plugin for wev
+# wev-awsmfa: A `wev` plugin to support AWS MFA
+
+TODO
