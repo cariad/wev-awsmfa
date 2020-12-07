@@ -1,4 +1,4 @@
-name: wev
+name: wev-awsmfa
 
 on:  # yamllint disable-line rule:truthy
   - push

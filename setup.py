@@ -31,33 +31,21 @@ classifiers.sort()
 
 setup(
     author="Cariad Eccleston",
-    author_email="cariad@cariad.me",
+    author_email="cariad@hey.com",
     classifiers=classifiers,
-    description="With environment variables",
+    description='"wev" plugin for Amazon Web Services multi-factor authentication',
     entry_points={
         "wev.plugins": "wev-awsmfa = wev_awsmfa",
     },
     include_package_data=True,
-    # install_requires=[
-    # "wev"
-    # "colorama~=0.4",
-    # "dwalk",
-    # "dwalk~=1.0",
-    # "pyyaml~=5.3",
-    # ],
+    install_requires=[
+        "boto3==1.*",
+    ],
     license="MIT License",
     long_description=long_description,
     long_description_content_type="text/markdown",
     name="wev-awsmfa",
     packages=["wev_awsmfa"],
-    # "py.typed" in each package's directory must be included for the package to
-    # be considered typed.
-    # package_data={
-    #     "wev.logging": ["py.typed"],
-    #     "wev.sdk": ["py.typed"],
-    #     "wev.state": ["py.typed"],
-    #     "wev.text": ["py.typed"],
-    # },
     python_requires=">=3.8",
     url="https://github.com/cariad/wev-awsmfa",
     version=version,
