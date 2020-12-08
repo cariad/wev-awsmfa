@@ -78,9 +78,9 @@ There are two optional properties:
     mfa_device: arn:aws:iam::123456789012:mfa/foo
 ```
 
-### Development
+## Development
 
-## Test plan
+### Test plan
 
 1. `cd` into a new directory and create `.wev.yml`:
 
