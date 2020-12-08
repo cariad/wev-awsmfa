@@ -78,7 +78,6 @@ There are two optional properties:
     mfa_device: arn:aws:iam::123456789012:mfa/foo
 ```
 
-
 ### Development
 
 ## Test plan
