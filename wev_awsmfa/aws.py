@@ -6,16 +6,20 @@ from boto3 import client
 from wev.sdk.exceptions import CannotResolveError
 
 
-def discover_mfa_device_arn(logger: Logger) -> str:
+def discover_mfa_device_arn(logger: Logger, username: str) -> str:
     """
-    Attempts to discover the ARN of the current identity's MFA device.
+    Attempts to discover the ARN of the given user's MFA device.
 
     Raises `CannotResolveError` if the device cannot found.
     """
     logger.debug("Requesting MFA devices...")
     iam = client("iam")
 
-    response = iam.list_mfa_devices(MaxItems=2)
+    try:
+        response = iam.list_mfa_devices(MaxItems=2, UserName=username)
+    except Exception as ex:
+        raise CannotResolveError(f'"list_mfa_devices" failed: {ex}')
+
     mfa_devices = response.get("MFADevices", None)
 
     if mfa_devices is None:
@@ -40,6 +44,19 @@ def discover_mfa_device_arn(logger: Logger) -> str:
     return str(serial)
 
 
+def discover_user_name(logger: Logger) -> str:
+    """
+    Attempts to discover the IAM user's name.
+    """
+    logger.debug("Requesting IAM user's name...")
+    try:
+        return str(client("iam").get_user()["User"]["UserName"])
+    except KeyError as ex:
+        raise CannotResolveError(f'"get_user" did not return key {ex}.')
+    except Exception as ex:
+        raise CannotResolveError(f'"get_user" failed: {ex}')
+
+
 def get_session_token(
     logger: Logger,
     duration: int,
@@ -61,8 +78,8 @@ def get_session_token(
             SerialNumber=serial,
             TokenCode=token,
         )
-    except sts.exceptions.ClientError as ex:
-        raise CannotResolveError(ex)
+    except Exception as ex:
+        raise CannotResolveError(f'"get_session_token" failed: {ex}')
 
     credentials = response.get("Credentials", None)
     if credentials is None:

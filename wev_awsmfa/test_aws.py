@@ -5,7 +5,11 @@ from mock import Mock, patch
 from pytest import mark, raises
 from wev.sdk.exceptions import CannotResolveError
 
-from wev_awsmfa.aws import discover_mfa_device_arn, get_session_token
+from wev_awsmfa.aws import (
+    discover_mfa_device_arn,
+    discover_user_name,
+    get_session_token,
+)
 
 
 def test_discover_mfa_device_arn(logger: Logger) -> None:
@@ -14,7 +18,17 @@ def test_discover_mfa_device_arn(logger: Logger) -> None:
         client = Mock()
         client.list_mfa_devices = Mock(return_value=response)
         client_maker.return_value = client
-        assert discover_mfa_device_arn(logger=logger) == "foo"
+        assert discover_mfa_device_arn(logger=logger, username="bob") == "foo"
+
+
+def test_discover_mfa_device_arn__exception(logger: Logger) -> None:
+    with raises(CannotResolveError) as ex:
+        with patch("wev_awsmfa.aws.client") as client_maker:
+            client = Mock()
+            client.list_mfa_devices = Mock(side_effect=Exception("puppers everywhere"))
+            client_maker.return_value = client
+            discover_mfa_device_arn(logger=logger, username="bob")
+    assert str(ex.value) == '"list_mfa_devices" failed: puppers everywhere'
 
 
 @mark.parametrize(
@@ -41,7 +55,7 @@ def test_discover_mfa_device_arn(logger: Logger) -> None:
         ),
     ],
 )
-def test_discover_mfa_device_arn__fail(
+def test_discover_mfa_device_arn__invalid(
     response: dict, expect: str, logger: Logger
 ) -> None:
     with raises(CannotResolveError) as ex:
@@ -49,8 +63,36 @@ def test_discover_mfa_device_arn__fail(
             client = Mock()
             client.list_mfa_devices = Mock(return_value=response)
             client_maker.return_value = client
-            discover_mfa_device_arn(logger=logger)
+            discover_mfa_device_arn(logger=logger, username="bob")
     assert str(ex.value) == expect
+
+
+def test_discover_user_name(logger: Logger) -> None:
+    with patch("wev_awsmfa.aws.client") as client_maker:
+        client = Mock()
+        client.get_user = Mock(return_value={"User": {"UserName": "bob"}})
+        client_maker.return_value = client
+        assert discover_user_name(logger=logger) == "bob"
+
+
+def test_discover_user_name__exception(logger: Logger) -> None:
+    with raises(CannotResolveError) as ex:
+        with patch("wev_awsmfa.aws.client") as client_maker:
+            client = Mock()
+            client.get_user = Mock(side_effect=Exception("fish everywhere"))
+            client_maker.return_value = client
+            discover_user_name(logger=logger)
+    assert str(ex.value) == '"get_user" failed: fish everywhere'
+
+
+def test_discover_user_name__invalid(logger: Logger) -> None:
+    with raises(CannotResolveError) as ex:
+        with patch("wev_awsmfa.aws.client") as client_maker:
+            client = Mock()
+            client.get_user = Mock(return_value={})
+            client_maker.return_value = client
+            discover_user_name(logger=logger)
+    assert str(ex.value) == "\"get_user\" did not return key 'User'."
 
 
 def test_get_session_token(logger: Logger) -> None:
@@ -72,6 +114,16 @@ def test_get_session_token(logger: Logger) -> None:
         ("alpha", "beta", "gamma"),
         datetime.fromisoformat("2020-01-01 00:00:00"),
     )
+
+
+def test_get_session_token_exception(logger: Logger) -> None:
+    with raises(CannotResolveError) as ex:
+        with patch("wev_awsmfa.aws.client") as client_maker:
+            client = Mock()
+            client.get_session_token = Mock(side_effect=Exception("squids everywhere"))
+            client_maker.return_value = client
+            get_session_token(logger=logger, duration=0, serial="", token="")
+    assert str(ex.value) == '"get_session_token" failed: squids everywhere'
 
 
 @mark.parametrize(
@@ -127,7 +179,11 @@ def test_get_session_token(logger: Logger) -> None:
         ),
     ],
 )
-def test_get_session_token__fail(response: dict, expect: str, logger: Logger) -> None:
+def test_get_session_token__invalid(
+    response: dict,
+    expect: str,
+    logger: Logger,
+) -> None:
     with raises(CannotResolveError) as ex:
         with patch("wev_awsmfa.aws.client") as client_maker:
             client = Mock()

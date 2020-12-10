@@ -3,7 +3,11 @@ from typing import List, Optional
 
 from wev.sdk import PluginBase, Resolution, ResolutionSupport
 
-from wev_awsmfa.aws import discover_mfa_device_arn, get_session_token
+from wev_awsmfa.aws import (
+    discover_mfa_device_arn,
+    discover_user_name,
+    get_session_token,
+)
 
 
 class Plugin(PluginBase):
@@ -43,12 +47,19 @@ class Plugin(PluginBase):
         """
         mfa_device_arn = self.get_mfa_device(logger=support.logger)
         if not mfa_device_arn:
-            mfa_device_arn = discover_mfa_device_arn(logger=support.logger)
+            username = discover_user_name(logger=support.logger)
+            mfa_device_arn = discover_mfa_device_arn(
+                logger=support.logger,
+                username=username,
+            )
         response = get_session_token(
             logger=support.logger,
             duration=self.get_duration(logger=support.logger),
             serial=mfa_device_arn,
-            token=support.confidential_prompt("We need your token.", "Token:"),
+            token=support.confidential_prompt(
+                "Please enter your MFA token to authenticate.",
+                "Token:",
+            ),
         )
 
         return Resolution.make(value=response[0], expires_at=response[1])

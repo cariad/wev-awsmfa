@@ -51,6 +51,12 @@ def discover_mfa_device_arn() -> Iterable[Mock]:
 
 
 @fixture
+def discover_user_name() -> Iterable[Mock]:
+    with patch("wev_awsmfa.plugin.discover_user_name", return_value="bob") as patched:
+        yield patched
+
+
+@fixture
 def get_session_token() -> Iterable[Mock]:
     response = (
         ("alpha", "beta", "gamma"),
@@ -68,6 +74,7 @@ def resolution_make() -> Iterable[Mock]:
 
 def test_resolve(
     discover_mfa_device_arn: Mock,
+    discover_user_name: Mock,
     get_session_token: Mock,
     resolution_make: Mock,
 ) -> None:

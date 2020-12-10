@@ -26,7 +26,7 @@ wev aws s3 ls
 
 ```text
 Resolving AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY and AWS_SESSION_TOKEN...
-We need your token.
+Please enter your MFA token to authenticate.
 
 Token:
 ```
@@ -96,10 +96,13 @@ There are two optional properties:
     "Statement": [
         {
             "Action": [
+                "iam:GetUser",
                 "iam:ListMFADevices"
             ],
             "Effect": "Allow",
-            "Resource": "*"
+            "Resource": [
+                "arn:aws:iam::*:user/${aws:username}"
+            ]
         },
         {
             "Action": "s3:ListAllMyBuckets",
