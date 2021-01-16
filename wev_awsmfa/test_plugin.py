@@ -84,3 +84,7 @@ def test_resolve(
         value=("alpha", "beta", "gamma"),
         expires_at=datetime.fromisoformat("2020-01-01 00:00:00"),
     )
+
+
+def test_version() -> None:
+    assert Plugin({}).version == "-1.-1.-1"

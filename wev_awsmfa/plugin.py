@@ -8,6 +8,7 @@ from wev_awsmfa.aws import (
     discover_user_name,
     get_session_token,
 )
+from wev_awsmfa.version import get_version
 
 
 class Plugin(PluginBase):
@@ -89,3 +90,8 @@ class Plugin(PluginBase):
             return arn
         logger.debug("No MFA device in configuration.")
         return None
+
+    @property
+    def version(self) -> str:
+        """ Gets the plugin's version. """
+        return get_version()
