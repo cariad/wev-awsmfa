@@ -77,3 +77,13 @@ A configuration with these optional properties set would look like this:
     duration: 1800
     mfa_device: arn:aws:iam::123456789012:mfa/foo
 ```
+
+## Thank you! 🎉
+
+My name is **Cariad**, and I'm an [independent freelance DevOps engineer](https://cariad.me).
+
+I'd love to spend more time working on projects like this, but--as a freelancer--my income is sporadic and I need to chase gigs that pay the rent.
+
+If this project has value to you, please consider [☕️ sponsoring](https://github.com/sponsors/cariad) me. Sponsorships grant me time to work on _your_ wants rather than _someone else's_.
+
+Thank you! ❤️
