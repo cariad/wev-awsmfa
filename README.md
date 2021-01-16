@@ -1,8 +1,8 @@
 # wev-awsmfa: A `wev` plugin to support Amazon Web Services multi-factor authentication on the command line
 
-[wev](https://github.com/cariad/wev) (**w**ith **e**nvironment **v**ariables)is a command line tool for resolving environment variables and running shell commands.
+![docs/demo.gif]
 
-The `wev-awsmfa` plugin allows you to verify your Amazon Web Services via multi-factor authentication without needing to modify your credentials file.
+`wev-awsmfa` is a plugin for [wev](https://github.com/cariad/wev) (**w**ith **e**nvironment **v**ariables) that allows you to create an Amazon Web Services CLI session with multi-factor authentication.
 
 ## Example
 
