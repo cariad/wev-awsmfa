@@ -11,7 +11,7 @@ Say your IAM user policy requires you to verify your identity via multi-factor a
 This limits your ability to use the `aws` CLI because you can't provide MFA tokens with your request:
 
 ```text
-% aws s3 ls
+$ aws s3 ls
 
 An error occurred (AccessDenied) when calling the ListBuckets operation: Access Denied
 ```
