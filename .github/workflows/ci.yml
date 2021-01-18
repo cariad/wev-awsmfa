@@ -18,6 +18,8 @@ jobs:
       - name: Test
         run: pipenv run ./test.sh
 
+      - uses: codecov/codecov-action@v1
+
       - name: Version
         run: echo "${GITHUB_REF##*/}" > wev_awsmfa/VERSION
 
@@ -40,12 +42,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: distributable
-
-      - name: Create distributable directory
-        run: |
-          mkdir dist
-          cp *.whl dist
-          ls -al dist/
+          path: dist
 
       - name: Publish
         uses: pypa/gh-action-pypi-publish@v1.4.1
