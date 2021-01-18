@@ -33,7 +33,7 @@ setup(
     author="Cariad Eccleston",
     author_email="cariad@hey.com",
     classifiers=classifiers,
-    description='"wev" plugin for Amazon Web Services multi-factor authentication',
+    description='"wev" plugin to support Amazon Web Services multi-factor authentication',  # noqa: E501
     entry_points={
         "wev.plugins": "wev-awsmfa = wev_awsmfa",
     },
