@@ -5,4 +5,4 @@ omit =
 source = wev_awsmfa
 
 [report]
-fail_under = 50
+fail_under = 99

@@ -24,6 +24,4 @@ echo "Checking Python types..."
 mypy wev_awsmfa
 
 echo "Testing..."
-coverage run
-coverage report -m
-coverage html
+pytest
