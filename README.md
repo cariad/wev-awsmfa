@@ -1,6 +1,6 @@
 # wev-awsmfa<br />A wev plugin to support Amazon Web Services multi-factor authentication on the command line
 
-[![Coverage Status](https://coveralls.io/repos/github/cariad/wev-awsmfa/badge.svg?branch=main)](https://coveralls.io/github/cariad/wev-awsmfa?branch=main)
+[![codecov](https://codecov.io/gh/cariad/wev-awsmfa/branch/main/graph/badge.svg?token=TS995LZMW1)](https://codecov.io/gh/cariad/wev-awsmfa)
 
 - ⚙️ Plugin for **[wev](https://github.com/cariad/wev)** (**w**ith **e**nvironment **v**ariables).
 - 👮 Handles your **one-time token** to create a **temporary authenticated session**.
