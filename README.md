@@ -6,7 +6,7 @@
 - 👮 Takes your **one-time token** and creates a **temporary multi-factor authenticated session**.
 - 📋 **Caches** your temporary session to **minimise prompts**.
 
-[![asciicast](https://asciinema.org/a/386493.svg)](https://asciinema.org/a/386493?speed=1.2)
+[![asciicast](https://asciinema.org/a/386493.svg)](https://asciinema.org/a/386493?size=big&speed=1.2)
 
 ## 🔥 The Problem
 
