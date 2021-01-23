@@ -1,7 +1,7 @@
 
 # Manual testing
 
-1. `cd` into a new directory and create `.wev.yml`:
+1. `cd` into a new directory and create `wev.yml`:
 
 ```yaml
 [AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN]:

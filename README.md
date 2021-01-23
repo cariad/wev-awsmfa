@@ -2,50 +2,59 @@
 
 [![codecov](https://codecov.io/gh/cariad/wev-awsmfa/branch/main/graph/badge.svg?token=TS995LZMW1)](https://codecov.io/gh/cariad/wev-awsmfa)
 
-- ⚙️ Plugin for **[wev](https://github.com/cariad/wev)** (**w**ith **e**nvironment **v**ariables).
-- 👮 Handles your **one-time token** to create a **temporary authenticated session**.
-- 📋 **Caches** your temporary session to **minimise prompts for your token**.
+- ⚙️ Plugin for **[wev](https://github.com/cariad/wev)**.
+- 👮 Takes your **one-time token** and creates a **temporary multi-factor authenticated session**.
+- 📋 **Caches** your temporary session to **minimise prompts**.
 
-![](https://github.com/cariad/wev-awsmfa/blob/main/docs/demo.gif?raw=true)
+[![asciicast](https://asciinema.org/a/386493.svg)](https://asciinema.org/a/386493?speed=1.2)
 
-## The Problem 🔥
+## 🔥 The Problem
 
 Say your IAM user policy requires you to verify your identity via multi-factor authentication.
 
-This limits your ability to use the `aws` CLI because you can't provide MFA tokens with your request:
+This limits your ability to use the `aws` CLI because you can't provide MFA tokens with your requests.
 
-```text
-$ aws s3 ls
+`wev-awsmfa` extends [wev](https://github.com/cariad/wev) to prompt for your one-time tokens and authenticate you automatically.
 
-An error occurred (AccessDenied) when calling the ListBuckets operation: Access Denied
-```
+## 🎁 Installation
 
-`wev-awsmfa` extends [wev](https://github.com/cariad/wev) to ask for your one-time tokens as-needed and authenticate you automatically.
-
-## Installation 🎁
-
-`wev-awsmfa` requires Python 3.8 or later.
+`wev-awsmfa` requires Python 3.8 or later and `wev`.
 
 ```bash
-pip3 install wev
-pip3 install wev-awsmfa
+python -m pip install wev
+python -m pip install wev-awsmfa
 ```
 
-## Configuration ⚙️
+## ⚙️ Configuration
 
-### Location
+### Filename and location
 
-[wev](https://github.com/cariad/wev) configuration files apply to the _working_ and _child_ directories.
+See [wevcli.app/configuration](https://wevcli.app/configuration) for a detailed guide to `wev` configuration files.
 
-This gives you a few options for where to place your configuration:
+If in doubt, create your configuration file as `wev.yml` in your project directory.
 
-- If you always need multi-factor authentication then place the configuration in your home directory (i.e. `~/.wev.yml`).
-- If you're a contractor working on mutiple projects with a client (i.e. you have `~/client-foo/project-a` and `~/client-foo/project-b`) that requires multi-factor authentication then place the configuration in your client's project directory (i.e. `~/client-foo/.wev.yml`).
-- If you have only one project that requires multi-factor authentication then place the configuration in that project's directory (i.e. `~/project-foo/.wev.yml`).
+### Keys
 
-### Content
+`wev-awsmfa` must be configured to resolve three environment variables:
 
-A minimal configuration would look like this:
+| Index | Description       | Suggested name          |
+|------:|-------------------|-------------------------|
+| 0     | AWS access key ID | `AWS_ACCESS_KEY_ID`     |
+| 1     | AWS secret key    | `AWS_SECRET_ACCESS_KEY` |
+| 2     | AWS session token | `AWS_SESSION_TOKEN`     |
+
+### Properties
+
+`wev-awsmfa` supports two optional properties:
+
+| Property   | Description                                  | Default                                   |
+|------------|----------------------------------------------|-------------------------------------------|
+| duration   | Duration of the temporary session in seconds | 900                                       |
+| mfa_device | ARN of the multi-factor device to use        | _Attempt to discover automatically._ |
+
+### Examples
+
+#### Minimal configuration
 
 ```yaml
 [AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN]:
@@ -53,12 +62,7 @@ A minimal configuration would look like this:
     id: wev-awsmfa
 ```
 
-Optional properties:
-
-- `mfa_device`: ARN of the MFA device to use. `wev-awsmfa` will attempt to discover this automatically if omitted.
-- `duration`: Duration of the temporary session, in seconds. Default is 900 seconds.
-
-A configuration with these optional properties set would look like this:
+#### 30-second sessions
 
 ```yaml
 [AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN]:
@@ -68,15 +72,22 @@ A configuration with these optional properties set would look like this:
     mfa_device: arn:aws:iam::123456789012:mfa/foo
 ```
 
-## Usage ⌨️
+## 💻 Usage
 
-With `wev` and `wev-awsmfa` installed and configured, you can run the `aws` CLI via `wev` in a multi-factor authenticated session:
+Run `wev` with any command that requires a multi-factor authenticated session.
+
+For example, to run `aws s3 ls` in a multi-factor authenticated session:
 
 ```bash
 wev aws s3 ls
 ```
 
 You'll be prompted to enter your one-time token, then `wev` will authenticate you and run the command.
+
+More examples:
+
+- [Amazon Web Services multi-factor authentication on the command line](https://wevcli.app/examples/aws-mfa-on-command-line/) on [wevcli.app](https://wevcli.app).
+
 
 ## FAQs 🙋‍♀️
 
